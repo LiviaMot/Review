@@ -14,7 +14,15 @@ class ControllerProduto {
 
   async PegarUm(req, res) {
     try {
-      res.status(200).send('dog francês')
+      // const id = req.params.id
+      // const params = req.params | pega o objeto inteiro então consequentemente o id
+      // params.id | outra forma de pegar o id
+      const { id } = req.params // tem que ser o nome correto existente
+      const produto = await ServiceProduto.PegarUm(id)
+
+      res.status(200).send({
+        data: produto
+      })
     } catch (error) {
       res.status(500).send({ msg: error.message })
     }
@@ -30,7 +38,9 @@ class ControllerProduto {
       const { nome, disponivel, qtde } = req.body
       await ServiceProduto.Criar(nome, disponivel, qtde)
 
-      res.status(201).send()
+      res.status(201).send({
+        msg: 'Produto criado com sucesso'
+      })
     } catch (error) {
       res.status(500).send({ msg: error.message })
     }
@@ -38,7 +48,16 @@ class ControllerProduto {
 
   async Alterar(req, res) {
     try {
-      res.status(200).send('dog francês')
+      const id = req.params.id
+      const nome = req.body?.nome
+      const disponivel = req.body?.disponivel
+      const qtde = req.body?.qtde
+      
+      await ServiceProduto.Alterar(id, nome, disponivel, qtde)
+
+      res.status(200).send({
+        msg: 'Produto alterado com sucesso'
+      })
     } catch (error) {
       res.status(500).send({ msg: error.message })
     }
@@ -46,7 +65,10 @@ class ControllerProduto {
 
   async Deletar(req, res) {
     try {
-      res.status(200).send('dog francês')
+      const { id } = req.params
+      const produto = await ServiceProduto.Deletar(id)
+
+      res.status(204).send()
     } catch (error) {
       res.status(500).send({ msg: error.message })
     }
